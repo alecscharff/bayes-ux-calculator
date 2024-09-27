@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+  <meta charset="UTF-8">
+  <title>CodePen - Bayesian calculator for UX Research</title>
+  <link rel="stylesheet" href="./style.css">
+
+</head>
+<body>
+<!-- partial:index.partial.html -->
+<!-- Top Explanation Section (Full Width) -->
+<div class="explanation">
+  <div class="explanation-content">
+    <h1>Bayesian Calculator for UX Research</h1>
+    <p>
+      Optimize your analysis of binomial data—such as completion rates, top-box Likert items, and theme occurrences—with this Bayesian beta-binomial calculator.
+    </p>
+    <p>
+      Bayesian analysis offers more intuitive and actionable insights than traditional frequentist statistics. Additionally, you can integrate informative priors based on expectations from past research.
+    </p>
+    <p>
+      <strong>Advantages of this approach:</strong>
+    </p>
+    <ul>
+      <li>
+        <a href="https://en.wikipedia.org/wiki/Credible_interval#Contrasts_with_confidence_interval" class="elegant-link">
+          Use Credible Intervals instead of Confidence Intervals
+        </a>
+        for simpler, probability-based interpretations of uncertainty, providing a direct understanding of parameter ranges.
+      </li>
+      <li>
+        <a href="https://en.wikipedia.org/wiki/Probability_of_direction" class="elegant-link">
+          Use Probability of Direction instead of p-value
+        </a>
+        to assess the likelihood that one option (A) outperforms another (B). This provides clearer and more actionable insights compared to null hypothesis significance testing, making it easier to communicate findings to stakeholders.
+      </li>
+    </ul>
+  </div>
+</div>
+
+<!-- Main Container (Centered Content) -->
+<div class="container">
+  <!-- Input and Output Columns -->
+  <div class="content">
+    <!-- Input Pane -->
+    <div class="input-pane" id="inputPane">
+      <h2>Inputs</h2>
+      <div class="input-group">
+        <label for="successes_A">Successes A</label>
+        <input type="number" id="successes_A" value="5" min="0">
+        <span class="error-message" id="error_successes_A"></span>
+      </div>
+      <div class="input-group">
+        <label for="trials_A">Trials A</label>
+        <input type="number" id="trials_A" value="10" min="1">
+        <span class="error-message" id="error_trials_A"></span>
+      </div>
+      <div class="input-group">
+        <label for="successes_B">Successes B</label>
+        <input type="number" id="successes_B" value="7" min="0">
+        <span class="error-message" id="error_successes_B"></span>
+      </div>
+      <div class="input-group">
+        <label for="trials_B">Trials B</label>
+        <input type="number" id="trials_B" value="10" min="1">
+        <span class="error-message" id="error_trials_B"></span>
+      </div>
+
+      <!-- Checkbox for Informative Prior -->
+      <div class="input-group">
+        <label><input type="checkbox" id="informativePrior"> Use Informative Prior</label>
+      </div>
+      <div id="informative-prior-inputs">
+        <div class="input-group">
+          <label for="alpha_A">Alpha A (Prior)</label>
+          <input type="number" id="alpha_A" value="1" min="0" step="0.1" disabled>
+          <span class="error-message" id="error_alpha_A"></span>
+        </div>
+        <div class="input-group">
+          <label for="beta_A">Beta A (Prior)</label>
+          <input type="number" id="beta_A" value="1" min="0" step="0.1" disabled>
+          <span class="error-message" id="error_beta_A"></span>
+        </div>
+        <div class="input-group">
+          <label for="alpha_B">Alpha B (Prior)</label>
+          <input type="number" id="alpha_B" value="1" min="0" step="0.1" disabled>
+          <span class="error-message" id="error_alpha_B"></span>
+        </div>
+        <div class="input-group">
+          <label for="beta_B">Beta B (Prior)</label>
+          <input type="number" id="beta_B" value="1" min="0" step="0.1" disabled>
+          <span class="error-message" id="error_beta_B"></span>
+        </div>
+      </div>
+
+      <button id="calculate" disabled>Calculate</button>
+    </div>
+
+    <!-- Output Pane -->
+    <div class="output-pane">
+      <!-- Posterior Distributions Card -->
+      <div class="card">
+        <h2>Posterior Distributions</h2>
+        <div id="chart"></div>
+        <div id="alpha_beta"></div>
+      </div>
+
+      <!-- P-Direction Test Card -->
+      <div class="card">
+        <h2>Probability of Direction</h2>
+        <p>Probability (\( P(p_A > p_B) \)): <span id="p_A_gt_B"></span></p>
+        <p>Probability (\( P(p_B > p_A) \)): <span id="p_B_gt_A"></span></p>
+        <p id="evidence"></p>
+        <p>For comparison, p-value from Fisher's Exact Test: <span id="p_value"></span></p>
+      </div>
+
+      <!-- Parameter Estimates Card -->
+      <div class="card">
+        <h2>95% Credible Intervals</h2>
+        <table id="parameter-estimates">
+          <thead>
+            <tr>
+              <th>Group</th>
+              <th>Observed P</th>
+              <th>Best Estimate P</th>
+              <th>CI Lower Bound</th>
+              <th>CI Upper Bound</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Group A</td>
+              <td id="obsP_A"></td>
+              <td id="bestP_A"></td>
+              <td id="ciLow_A"></td>
+              <td id="ciUp_A"></td>
+            </tr>
+            <tr>
+              <td>Group B</td>
+              <td id="obsP_B"></td>
+              <td id="bestP_B"></td>
+              <td id="ciLow_B"></td>
+              <td id="ciUp_B"></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- Additional Explanation Section -->
+  <div class="additional-explanation">
+    <h2>Additional Explanation</h2>
+    <p><strong>Posterior Distributions:</strong> These distributions represent the updated beliefs about the success probabilities of each treatment after observing the data. They combine the prior beliefs (if informative priors are used) with the observed data.</p>
+
+    <p><strong>P-Direction Test:</strong> This test calculates the probability that the success probability of Treatment A is greater than Treatment B (\( P(p_A > p_B) \)) and vice versa. It provides a Bayesian interpretation of the evidence supporting one treatment over the other.</p>
+
+    <p><strong>95% Credible Intervals:</strong> This section displays the observed proportions, the best estimates based on the posterior distributions, and the 95% credible intervals for each treatment. These estimates provide a summary of each group's 'success probability' \( p \)
+      and the uncertainty around it.</p>
+
+    <p><strong>Fisher's Exact Test:</strong> A frequentist statistical test used to determine if there are nonrandom associations between two categorical variables. In this context, it assesses whether the difference in success rates between the two treatments is statistically significant.</p>
+
+    <p><strong>Mathematical Foundations:</strong></p>
+    <ul>
+      <li><em>Beta Distribution:</em> The Beta distribution is a conjugate prior for the binomial distribution in Bayesian statistics. It is parameterized by alpha (\( \alpha \)) and beta (\( \beta \)) parameters, which can be adjusted to reflect prior beliefs about the success probabilities.</li>
+      <li><em>Credible Intervals:</em> These intervals represent the range within which the true success probability lies with a certain level of confidence (e.g., 95%). They are derived from the posterior distributions.</li>
+      <li><em>Fisher's Exact Test:</em> This test calculates the exact probability of obtaining a contingency table at least as extreme as the one observed, under the null hypothesis of no association between the variables.</li>
+    </ul>
+  </div>
+</div>
+
+<footer>
+  <p>&copy; 2024 Alec Scharff. All rights reserved.</p>
+</footer>
+<!-- partial -->
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/jstat/1.9.4/jstat.min.js'></script>
+<script src='https://cdn.plot.ly/plotly-latest.min.js'></script>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js'></script><script  src="./script.js"></script>
+
+</body>
+</html>
