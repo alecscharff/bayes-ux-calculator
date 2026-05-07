@@ -1,184 +1,244 @@
 <!DOCTYPE html>
-<html lang="en" >
+<html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Bayesian calculator for UX Research</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bayesian Calculator for UX Research</title>
   <link rel="stylesheet" href="./style.css">
-
 </head>
 <body>
-<!-- partial:index.partial.html -->
-<!-- Top Explanation Section (Full Width) -->
+
+<button id="theme-toggle" class="theme-toggle" aria-label="Toggle dark mode" title="Toggle dark mode">
+  <svg class="icon-sun" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
+  <svg class="icon-moon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+</button>
+
 <div class="explanation">
   <div class="explanation-content">
     <h1>Bayesian Calculator for UX Research</h1>
-    <p>
-      Optimize your analysis of binomial data—such as completion rates, agreement percentages, and theme occurrences—with this Bayesian beta-binomial calculator.
-    </p>
-    <p>
-      Bayesian analysis offers more intuitive and actionable insights than traditional frequentist statistics. Additionally, you can integrate informative priors based on expectations from past research, or from your own assumptions. To create intuition-based priors, try my
-      <a href="https://alecscharff.github.io/intuitive-priors/" class="elegant-link">
-        Intuition-based Bayesian Priors Calculator
-      </a>.
-    </p>
-    <p>
-      <strong>Advantages of this approach:</strong>
-    </p>
-    <ul>
-      <li>
-        <a href="https://en.wikipedia.org/wiki/Credible_interval#Contrasts_with_confidence_interval" class="elegant-link">
-          Use Credible Intervals instead of Confidence Intervals
-        </a>
-        for simpler, probability-based interpretations of uncertainty, providing a direct understanding of parameter ranges.
-      </li>
-      <li>
-        <a href="https://en.wikipedia.org/wiki/Probability_of_direction" class="elegant-link">
-          Use Probability of Direction instead of p-value
-        </a>
-        to assess the likelihood that one option (A) outperforms another (B). This provides clearer and more actionable insights compared to null hypothesis significance testing, making it easier to communicate findings to stakeholders.
-      </li>
-    </ul>
+    <p>Compare two variants on a binary outcome — task success, click-through, theme prevalence — and get answers like <em>"A is 96% likely to be better"</em> instead of <em>"p = 0.18 — inconclusive."</em></p>
+    <p>Bayesian results are easier to act on, easier to explain, and honest about uncertainty when samples are small.</p>
   </div>
 </div>
 
-<!-- Main Container (Centered Content) -->
 <div class="container">
-  <!-- Input and Output Columns -->
   <div class="content">
-    <!-- Input Pane -->
+
     <div class="input-pane" id="inputPane">
-      <h2>Inputs</h2>
-      <div class="input-group">
-        <label for="successes_A">Successes A</label>
-        <input type="number" id="successes_A" value="5" min="0">
-        <span class="error-message" id="error_successes_A"></span>
+      <div class="input-pane-header">
+        <button id="input-pin" class="input-pin" aria-label="Pin inputs to top while scrolling" aria-pressed="false">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="12" y1="17" x2="12" y2="22"/>
+            <path d="M5 17h14v-1.76a2 2 0 0 0-1.11-1.79l-1.78-.9A2 2 0 0 1 15 10.76V6h1a2 2 0 0 0 0-4H8a2 2 0 0 0 0 4h1v4.76a2 2 0 0 1-1.11 1.79l-1.78.9A2 2 0 0 0 5 15.24Z"/>
+          </svg>
+          <span class="input-pin-label">Pin to top</span>
+        </button>
       </div>
-      <div class="input-group">
-        <label for="trials_A">Trials A</label>
-        <input type="number" id="trials_A" value="10" min="1">
-        <span class="error-message" id="error_trials_A"></span>
-      </div>
-      <div class="input-group">
-        <label for="successes_B">Successes B</label>
-        <input type="number" id="successes_B" value="7" min="0">
-        <span class="error-message" id="error_successes_B"></span>
-      </div>
-      <div class="input-group">
-        <label for="trials_B">Trials B</label>
-        <input type="number" id="trials_B" value="10" min="1">
-        <span class="error-message" id="error_trials_B"></span>
-      </div>
+      <div class="input-pane-grid">
+        <div class="group-block">
+          <h3>Group A</h3>
+          <div class="input-row">
+            <div class="input-group">
+              <label for="successes_A">Successes</label>
+              <input type="number" id="successes_A" value="5" min="0">
+            </div>
+            <div class="input-group">
+              <label for="trials_A">Trials</label>
+              <input type="number" id="trials_A" value="10" min="1">
+            </div>
+          </div>
+          <span class="error-message" id="error_A"></span>
+        </div>
 
-      <!-- Checkbox for Informative Prior -->
-      <div class="input-group">
-        <label><input type="checkbox" id="informativePrior"> Use Informative Prior</label>
-      </div>
-      <div id="informative-prior-inputs">
-        <div class="input-group">
-          <label for="alpha_A">Alpha A (Prior)</label>
-          <input type="number" id="alpha_A" value="1" min="0" step="0.1" disabled>
-          <span class="error-message" id="error_alpha_A"></span>
+        <div class="group-block">
+          <h3>Group B</h3>
+          <div class="input-row">
+            <div class="input-group">
+              <label for="successes_B">Successes</label>
+              <input type="number" id="successes_B" value="7" min="0">
+            </div>
+            <div class="input-group">
+              <label for="trials_B">Trials</label>
+              <input type="number" id="trials_B" value="10" min="1">
+            </div>
+          </div>
+          <span class="error-message" id="error_B"></span>
         </div>
-        <div class="input-group">
-          <label for="beta_A">Beta A (Prior)</label>
-          <input type="number" id="beta_A" value="1" min="0" step="0.1" disabled>
-          <span class="error-message" id="error_beta_A"></span>
-        </div>
-        <div class="input-group">
-          <label for="alpha_B">Alpha B (Prior)</label>
-          <input type="number" id="alpha_B" value="1" min="0" step="0.1" disabled>
-          <span class="error-message" id="error_alpha_B"></span>
-        </div>
-        <div class="input-group">
-          <label for="beta_B">Beta B (Prior)</label>
-          <input type="number" id="beta_B" value="1" min="0" step="0.1" disabled>
-          <span class="error-message" id="error_beta_B"></span>
-        </div>
-      </div>
 
-      <button id="calculate" disabled>Calculate</button>
+        <div class="prior-selector compact">
+          <h3>Prior</h3>
+          <div class="prior-chips" role="radiogroup">
+            <label class="prior-chip">
+              <input type="radio" name="prior" value="uniform" checked>
+              <span class="chip-title">Uniform</span>
+              <span class="chip-formula">Beta(1, 1)</span>
+            </label>
+            <label class="prior-chip">
+              <input type="radio" name="prior" value="jeffreys">
+              <span class="chip-title">Jeffreys</span>
+              <span class="chip-formula">Beta(0.5, 0.5)</span>
+            </label>
+            <label class="prior-chip">
+              <input type="radio" name="prior" value="weak">
+              <span class="chip-title">Weak</span>
+              <span class="chip-formula">Beta(2, 2)</span>
+            </label>
+            <details class="custom-prior">
+              <summary>Custom…</summary>
+              <div class="custom-popover">
+                <p class="custom-warn">Only use when you have real prior data or expert estimates. Don't have one? Build one with the <a href="https://alecscharff.github.io/intuitive-priors/" class="elegant-link" target="_blank" rel="noopener">Intuition-based Priors Calculator</a>.</p>
+                <label class="prior-chip-inline">
+                  <input type="radio" name="prior" value="custom">
+                  <span>Use custom values</span>
+                </label>
+                <div class="custom-inputs">
+                  <div class="input-row">
+                    <div class="input-group">
+                      <label for="alpha_A">α (A)</label>
+                      <input type="number" id="alpha_A" value="1" min="0.01" step="0.1" disabled>
+                    </div>
+                    <div class="input-group">
+                      <label for="beta_A">β (A)</label>
+                      <input type="number" id="beta_A" value="1" min="0.01" step="0.1" disabled>
+                    </div>
+                  </div>
+                  <div class="input-row">
+                    <div class="input-group">
+                      <label for="alpha_B">α (B)</label>
+                      <input type="number" id="alpha_B" value="1" min="0.01" step="0.1" disabled>
+                    </div>
+                    <div class="input-group">
+                      <label for="beta_B">β (B)</label>
+                      <input type="number" id="beta_B" value="1" min="0.01" step="0.1" disabled>
+                    </div>
+                  </div>
+                  <span class="error-message" id="error_custom"></span>
+                </div>
+              </div>
+            </details>
+          </div>
+          <p class="prior-hint-context" id="prior-hint">Default. All rates 0–100% equally plausible before data.</p>
+        </div>
+      </div>
     </div>
 
-    <!-- Output Pane -->
     <div class="output-pane">
-      <!-- Posterior Distributions Card -->
+
+      <div class="summary-banner" id="summary"></div>
+
       <div class="card">
-        <h2>Posterior Distributions</h2>
+        <h2>Estimated rates for each group <span class="card-subtitle">(<em>posterior distributions</em>)</span></h2>
         <div id="chart"></div>
-        <div id="alpha_beta"></div>
+        <p class="explainer">These curves show your updated belief about each group's true rate after combining the data with the prior. Tighter, taller curves mean more certainty. The faint dashed lines show the prior for comparison.</p>
       </div>
 
-      <!-- P-Direction Test Card -->
       <div class="card">
-        <h2>Probability of Direction</h2>
-        <p>Probability (\( P(p_A > p_B) \)): <span id="p_A_gt_B"></span></p>
-        <p>Probability (\( P(p_B > p_A) \)): <span id="p_B_gt_A"></span></p>
-        <p id="evidence"></p>
-        <p>For comparison, p-value from Fisher's Exact Test: <span id="p_value"></span></p>
+        <h2>Probability of Direction <span class="card-subtitle">(which group is more likely better?)</span></h2>
+        <div id="diff-chart"></div>
+        <p class="explainer">The curve shows the posterior distribution of the difference <strong>p<sub>A</sub> − p<sub>B</sub></strong>. The shaded areas on each side of zero are the <strong>Probability of Direction</strong>: how likely each group is to be the better one.</p>
       </div>
 
-      <!-- Parameter Estimates Card -->
       <div class="card">
-        <h2>95% Credible Intervals</h2>
+        <h2>Credible intervals</h2>
+        <p class="card-intro">A <strong>credible interval</strong> is the range most likely to contain the true value, given your data and prior. A 95% credible interval can be read literally: <em>"there's a 95% probability the true value falls in this range"</em> — which is what most people incorrectly assume a frequentist confidence interval means. Wider intervals signal more uncertainty, usually from smaller samples.</p>
+        <div class="card-controls">
+          <label for="ci-level">Credibility level:</label>
+          <select id="ci-level">
+            <option value="0.80">80%</option>
+            <option value="0.90">90%</option>
+            <option value="0.95" selected>95%</option>
+            <option value="0.99">99%</option>
+          </select>
+        </div>
+        <div class="ci-charts">
+          <div class="ci-chart-wrap">
+            <h3 class="ci-chart-label color-A">Group A</h3>
+            <div id="ci-chart-A"></div>
+            <div class="ci-chart-caption" id="ci-chart-A-caption"></div>
+          </div>
+          <div class="ci-chart-wrap">
+            <h3 class="ci-chart-label color-B">Group B</h3>
+            <div id="ci-chart-B"></div>
+            <div class="ci-chart-caption" id="ci-chart-B-caption"></div>
+          </div>
+        </div>
         <table id="parameter-estimates">
           <thead>
             <tr>
               <th>Group</th>
-              <th>Observed P</th>
-              <th>Best Estimate P</th>
-              <th>CI Lower Bound</th>
-              <th>CI Upper Bound</th>
+              <th>Observed</th>
+              <th>Best estimate</th>
+              <th>Lower</th>
+              <th>Upper</th>
             </tr>
           </thead>
           <tbody>
             <tr>
-              <td>Group A</td>
+              <td>A</td>
               <td id="obsP_A"></td>
               <td id="bestP_A"></td>
               <td id="ciLow_A"></td>
               <td id="ciUp_A"></td>
             </tr>
             <tr>
-              <td>Group B</td>
+              <td>B</td>
               <td id="obsP_B"></td>
               <td id="bestP_B"></td>
               <td id="ciLow_B"></td>
               <td id="ciUp_B"></td>
             </tr>
+            <tr class="diff-row">
+              <td>A − B</td>
+              <td>—</td>
+              <td id="bestP_diff"></td>
+              <td id="ciLow_diff"></td>
+              <td id="ciUp_diff"></td>
+            </tr>
           </tbody>
         </table>
+        <p class="explainer small">Showing the <span id="ci-level-label">95%</span> interval. Adjust the level above to widen or tighten.</p>
       </div>
+
+      <div class="card">
+        <h2>Region of Practical Equivalence (ROPE)</h2>
+        <p class="card-intro">The <strong>ROPE</strong> is a band around zero difference that you'd consider "not meaningful." Statistical evidence and practical importance aren't the same: a real 0.3pp difference may not be worth acting on. By committing to a ROPE up front, you turn <em>"is there a difference?"</em> into the more useful question, <em>"is the difference big enough to matter?"</em> The bar below shows what fraction of the posterior falls below, inside, and above the ROPE.</p>
+        <div class="rope-controls">
+          <label for="rope-slider">Smallest difference that would matter to you:</label>
+          <div class="rope-slider-row">
+            <span>±</span>
+            <input type="range" id="rope-slider" min="0" max="20" step="0.5" value="2">
+            <input type="number" id="rope-value" min="0" max="20" step="0.5" value="2" class="rope-number">
+            <span>percentage points</span>
+          </div>
+        </div>
+        <div id="rope-bar" class="rope-bar"></div>
+        <div id="rope-verdict" class="rope-verdict"></div>
+        <p class="explainer small">The verdict above uses a strict 95% threshold so you can act with high confidence. Adjust the ROPE to match the smallest difference that would actually change your decision.</p>
+      </div>
+
+      <details class="card collapsed-card">
+        <summary><h2>Compare to frequentist test</h2></summary>
+        <p>Fisher's exact test p-value: <span id="p_value"></span></p>
+        <p class="explainer small">A frequentist test for the same data. We surface this for comparison only — the Bayesian results above are the primary answer.</p>
+      </details>
+
+      <details class="card collapsed-card">
+        <summary><h2>Posterior parameters</h2></summary>
+        <div id="alpha_beta"></div>
+      </details>
+
     </div>
-  </div>
-
-  <!-- Additional Explanation Section -->
-  <div class="additional-explanation">
-    <h2>Additional Explanation</h2>
-    <p><strong>Posterior Distributions:</strong> These distributions represent the updated beliefs about the success probabilities of each treatment after observing the data. They combine the prior beliefs (if informative priors are used) with the observed data.</p>
-
-    <p><strong>P-Direction Test:</strong> This test calculates the probability that the success probability of Treatment A is greater than Treatment B (\( P(p_A > p_B) \)) and vice versa. It provides a Bayesian interpretation of the evidence supporting one treatment over the other.</p>
-
-    <p><strong>95% Credible Intervals:</strong> This section displays the observed proportions, the best estimates based on the posterior distributions, and the 95% credible intervals for each treatment. These estimates provide a summary of each group's 'success probability' \( p \)
-      and the uncertainty around it.</p>
-
-    <p><strong>Fisher's Exact Test:</strong> A frequentist statistical test used to determine if there are nonrandom associations between two categorical variables. In this context, it assesses whether the difference in success rates between the two treatments is statistically significant.</p>
-
-    <p><strong>Mathematical Foundations:</strong></p>
-    <ul>
-      <li><em>Beta Distribution:</em> The Beta distribution is a conjugate prior for the binomial distribution in Bayesian statistics. It is parameterized by alpha (\( \alpha \)) and beta (\( \beta \)) parameters, which can be adjusted to reflect prior beliefs about the success probabilities.</li>
-      <li><em>Credible Intervals:</em> These intervals represent the range within which the true success probability lies with a certain level of confidence (e.g., 95%). They are derived from the posterior distributions.</li>
-      <li><em>Fisher's Exact Test:</em> This test calculates the exact probability of obtaining a contingency table at least as extreme as the one observed, under the null hypothesis of no association between the variables.</li>
-    </ul>
   </div>
 </div>
 
 <footer>
-  <p>&copy; 2024 Alec Scharff. All rights reserved.</p>
+  <p>&copy; Alec Scharff</p>
 </footer>
-<!-- partial -->
-  <script src='https://cdnjs.cloudflare.com/ajax/libs/jstat/1.9.4/jstat.min.js'></script>
+
+<script src='https://cdnjs.cloudflare.com/ajax/libs/jstat/1.9.4/jstat.min.js'></script>
 <script src='https://cdn.plot.ly/plotly-latest.min.js'></script>
-<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js'></script><script  src="./script.js"></script>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js'></script>
+<script src="./script.js"></script>
 
 </body>
 </html>
