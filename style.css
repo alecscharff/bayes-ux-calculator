@@ -98,7 +98,7 @@ body {
 }
 
 .theme-toggle {
-  position: fixed;
+  position: absolute;
   top: 1rem;
   right: 1rem;
   width: 2.5rem;
@@ -112,7 +112,7 @@ body {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  z-index: 100;
+  z-index: 5;
   box-shadow: var(--card-shadow);
   transition: color 0.15s ease, background-color 0.15s ease, border-color 0.15s ease;
 }
@@ -991,6 +991,94 @@ tbody tr:last-child td {
   .rope-axis span:nth-child(2),
   .rope-axis span:last-child {
     text-align: center;
+  }
+
+  .input-pane[data-pinned="true"] {
+    padding: 0.625rem 0.75rem;
+  }
+
+  .input-pane[data-pinned="true"] .input-pane-header {
+    margin-bottom: 0.5rem;
+  }
+
+  .input-pane[data-pinned="true"] .input-pane-grid {
+    gap: 0.375rem;
+  }
+
+  .input-pane[data-pinned="true"] .group-block {
+    display: flex;
+    align-items: center;
+    gap: 0.625rem;
+  }
+
+  .input-pane[data-pinned="true"] .group-block h3 {
+    margin-bottom: 0;
+    font-size: 0.625rem;
+    flex-shrink: 0;
+    width: 3.25rem;
+  }
+
+  .input-pane[data-pinned="true"] .input-row {
+    flex: 1;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.375rem;
+  }
+
+  .input-pane[data-pinned="true"] .input-group label {
+    font-size: 0.5625rem;
+    margin-bottom: 0.0625rem;
+    color: var(--text-tick);
+  }
+
+  .input-pane[data-pinned="true"] input[type="number"] {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.875rem;
+    width: 100%;
+  }
+
+  .input-pane[data-pinned="true"] .prior-selector {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+
+  .input-pane[data-pinned="true"] .prior-selector h3 {
+    margin-bottom: 0;
+    font-size: 0.625rem;
+    flex-shrink: 0;
+  }
+
+  .input-pane[data-pinned="true"] .prior-chips {
+    gap: 0.25rem;
+  }
+
+  .input-pane[data-pinned="true"] .prior-chip:not(:has(input:checked)) {
+    display: none;
+  }
+
+  .input-pane[data-pinned="true"] .prior-chip {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.75rem;
+  }
+
+  .input-pane[data-pinned="true"] .custom-prior {
+    display: none;
+  }
+
+  .input-pane[data-pinned="true"] .prior-hint-context {
+    display: none;
+  }
+
+  .input-pane[data-pinned="true"] .input-pin {
+    height: 1.5rem;
+    padding: 0.25rem 0.5rem;
+    font-size: 0.625rem;
+  }
+
+  .input-pane[data-pinned="true"] .input-pin svg {
+    width: 12px;
+    height: 12px;
   }
 }
 
